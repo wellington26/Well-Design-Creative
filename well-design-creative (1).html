@@ -1,0 +1,985 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Well Design Creative</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+<style>
+:root{--bg:#0e0e12;--surface:#16161c;--surface2:#1e1e27;--border:rgba(255,255,255,0.08);--accent:#d4a853;--text:#f0ede8;--muted:#8a8799;--free:#5cb88a;--paid:#e8824a;--danger:#e05c5c;--success:#5cb88a;--radius:12px;--radius-sm:8px}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;min-height:100vh;overflow-x:hidden}
+::-webkit-scrollbar{width:5px}::-webkit-scrollbar-track{background:var(--bg)}::-webkit-scrollbar-thumb{background:var(--surface2);border-radius:99px}
+.app{display:flex;height:100vh}
+.sidebar{width:224px;background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;flex-shrink:0}
+.main{flex:1;display:flex;flex-direction:column;overflow:hidden}
+.sidebar-logo{padding:20px 18px 16px;border-bottom:1px solid var(--border)}
+.logo-mark{display:flex;align-items:center;gap:10px}
+.logo-icon{width:32px;height:32px;background:var(--accent);border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.logo-icon svg{width:18px;height:18px;fill:var(--bg)}
+.logo-text{display:flex;flex-direction:column;line-height:1.1}
+.logo-name{font-family:'Playfair Display',serif;font-size:13px;font-weight:700;color:var(--text)}
+.logo-sub{font-size:9px;color:var(--muted);letter-spacing:.1em;text-transform:uppercase}
+.sidebar-nav{flex:1;padding:12px 10px;display:flex;flex-direction:column;gap:2px;overflow-y:auto}
+.nav-label{font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;padding:12px 8px 6px}
+.nav-item{display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:var(--radius-sm);cursor:pointer;font-size:13px;color:var(--muted);transition:all .15s;border:none;background:none;width:100%;text-align:left}
+.nav-item:hover{background:var(--surface2);color:var(--text)}
+.nav-item.active{background:rgba(212,168,83,.12);color:var(--accent)}
+.nav-item svg{width:16px;height:16px;flex-shrink:0;opacity:.7}
+.nav-item.active svg{opacity:1}
+.nav-badge{margin-left:auto;font-size:9px;padding:2px 6px;border-radius:99px;font-weight:500}
+.badge-free{background:rgba(92,184,138,.2);color:var(--free)}
+.badge-pro{background:rgba(212,168,83,.2);color:var(--accent)}
+.sidebar-footer{padding:12px 10px;border-top:1px solid var(--border)}
+.plan-card{background:var(--surface2);border-radius:var(--radius-sm);padding:12px;border:1px solid var(--border)}
+.upgrade-btn{width:100%;padding:8px;background:var(--accent);color:var(--bg);border:none;border-radius:var(--radius-sm);font-size:12px;font-weight:500;cursor:pointer;transition:opacity .15s;margin-top:8px}
+.upgrade-btn:hover{opacity:.85}
+.usage-bar{height:3px;background:var(--border);border-radius:99px;margin-top:6px}
+.usage-fill{height:100%;border-radius:99px;background:var(--free);width:30%}
+.topbar{background:var(--surface);border-bottom:1px solid var(--border);padding:0 24px;height:56px;display:flex;align-items:center;gap:16px;flex-shrink:0}
+.topbar-title{font-family:'Playfair Display',serif;font-size:18px;font-weight:700;flex:1}
+.topbar-actions{display:flex;align-items:center;gap:10px}
+.btn{padding:8px 16px;border-radius:var(--radius-sm);font-size:13px;font-weight:500;cursor:pointer;border:none;transition:all .15s;display:flex;align-items:center;gap:6px;white-space:nowrap}
+.btn-ghost{background:transparent;color:var(--muted);border:1px solid var(--border)}
+.btn-ghost:hover{background:var(--surface2);color:var(--text)}
+.btn-accent{background:var(--accent);color:var(--bg)}
+.btn-accent:hover{opacity:.85}
+.avatar{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,#d4a853,#e8c97a);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:var(--bg);cursor:pointer}
+.content{flex:1;overflow-y:auto;padding:24px}
+.page{display:none}.page.active{display:block}
+.dash-hero{background:linear-gradient(135deg,var(--surface) 0%,rgba(212,168,83,.08) 100%);border:1px solid var(--border);border-radius:16px;padding:28px 32px;margin-bottom:24px;position:relative;overflow:hidden}
+.dash-hero::before{content:'';position:absolute;right:-40px;top:-40px;width:200px;height:200px;background:radial-gradient(circle,rgba(212,168,83,.15) 0%,transparent 70%);pointer-events:none}
+.dash-hero h2{font-family:'Playfair Display',serif;font-size:26px;font-weight:700;margin-bottom:6px}
+.dash-hero p{font-size:14px;color:var(--muted);line-height:1.6;max-width:480px}
+.dash-hero-btns{display:flex;gap:10px;margin-top:18px;flex-wrap:wrap}
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:24px}
+.stat-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:16px 18px}
+.stat-val{font-size:26px;font-weight:700;font-family:'Playfair Display',serif;color:var(--accent)}
+.stat-label{font-size:12px;color:var(--muted);margin-top:2px}
+.section-title{font-family:'Playfair Display',serif;font-size:18px;font-weight:700;margin-bottom:16px;display:flex;align-items:center;gap:10px}
+.section-title span{font-family:'DM Sans',sans-serif;font-size:12px;color:var(--muted);font-weight:400}
+.cards-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:14px}
+.template-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;cursor:pointer;transition:all .2s;position:relative}
+.template-card:hover{border-color:var(--accent);transform:translateY(-2px)}
+.template-thumb{height:120px;display:flex;align-items:center;justify-content:center;font-size:32px;position:relative;overflow:hidden}
+.template-thumb-gradient{width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:40px}
+.template-info{padding:10px 12px}
+.template-name{font-size:12px;font-weight:500;color:var(--text);margin-bottom:2px}
+.template-type{font-size:10px;color:var(--muted)}
+.ai-layout{display:grid;grid-template-columns:340px 1fr;gap:20px;height:calc(100vh - 104px)}
+.ai-panel{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px;display:flex;flex-direction:column;gap:14px;overflow-y:auto}
+.ai-panel h3{font-family:'Playfair Display',serif;font-size:16px;font-weight:700}
+.field-label{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px}
+textarea.field,input.field,select.field{width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius-sm);color:var(--text);font-family:'DM Sans',sans-serif;font-size:13px;padding:10px 12px;outline:none;transition:border-color .15s;resize:vertical}
+textarea.field{min-height:80px}
+textarea.field:focus,input.field:focus,select.field:focus{border-color:var(--accent)}
+.style-chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{padding:5px 11px;background:var(--surface2);border:1px solid var(--border);border-radius:99px;font-size:11px;color:var(--muted);cursor:pointer;transition:all .15s}
+.chip:hover,.chip.active{background:rgba(212,168,83,.15);border-color:var(--accent);color:var(--accent)}
+.size-row{display:flex;gap:6px}
+.size-btn{flex:1;padding:7px 4px;background:var(--surface2);border:1px solid var(--border);border-radius:6px;font-size:11px;color:var(--muted);cursor:pointer;text-align:center;transition:all .15s}
+.size-btn:hover,.size-btn.active{border-color:var(--accent);color:var(--accent)}
+.api-cards{display:flex;flex-direction:column;gap:8px}
+.api-card{background:var(--surface2);border:1.5px solid var(--border);border-radius:var(--radius-sm);cursor:pointer;transition:all .15s;overflow:hidden}
+.api-card.selected{border-color:var(--accent)}
+.api-card-header{display:flex;align-items:center;gap:10px;padding:10px 12px}
+.api-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0}
+.api-card-name{font-size:13px;font-weight:500;flex:1}
+.api-tag{font-size:9px;padding:2px 7px;border-radius:99px;font-weight:600}
+.tag-gratis{background:rgba(92,184,138,.2);color:var(--free)}
+.tag-pago{background:rgba(232,130,74,.2);color:var(--paid)}
+.tag-trial{background:rgba(212,168,83,.2);color:var(--accent)}
+.api-card-body{display:none;padding:0 12px 12px;border-top:1px solid var(--border)}
+.api-card.selected .api-card-body{display:block;padding-top:10px}
+.api-guide{font-size:11px;color:var(--muted);line-height:1.7;margin-bottom:8px;background:rgba(92,184,138,.06);border:1px solid rgba(92,184,138,.15);border-radius:6px;padding:8px 10px}
+.api-guide a{color:var(--accent)}
+.api-guide b{color:var(--text)}
+.api-guide-warn{background:rgba(232,130,74,.06);border-color:rgba(232,130,74,.2)}
+.gen-btn{width:100%;padding:13px;background:var(--accent);color:var(--bg);border:none;border-radius:var(--radius);font-size:14px;font-weight:700;cursor:pointer;transition:all .15s;display:flex;align-items:center;justify-content:center;gap:8px}
+.gen-btn:hover{opacity:.88;transform:translateY(-1px)}
+.gen-btn:disabled{opacity:.4;cursor:not-allowed;transform:none}
+.ai-results{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px;display:flex;flex-direction:column;gap:16px;overflow-y:auto}
+.results-placeholder{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;color:var(--muted)}
+.results-placeholder svg{width:48px;height:48px;opacity:.3}
+.result-img-wrap{border-radius:var(--radius);overflow:hidden;border:1px solid var(--border);aspect-ratio:1;background:var(--surface2);display:flex;align-items:center;justify-content:center;position:relative;min-height:280px}
+.result-img-wrap img{width:100%;height:100%;object-fit:cover}
+.result-img-wrap .img-overlay{position:absolute;bottom:0;left:0;right:0;background:linear-gradient(transparent,rgba(0,0,0,.7));padding:12px 10px 10px;opacity:0;transition:opacity .2s;display:flex;gap:6px}
+.result-img-wrap:hover .img-overlay{opacity:1}
+.img-btn{padding:6px 12px;background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.2);border-radius:6px;color:#fff;font-size:12px;cursor:pointer;backdrop-filter:blur(4px);text-decoration:none;transition:background .15s}
+.img-btn:hover{background:rgba(255,255,255,.25)}
+.spinner-ring{width:28px;height:28px;border:2.5px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spin .7s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.status-bar{padding:10px 14px;border-radius:var(--radius-sm);font-size:12px;line-height:1.5}
+.status-loading{background:rgba(212,168,83,.1);border:1px solid rgba(212,168,83,.2);color:var(--accent)}
+.status-success{background:rgba(92,184,138,.1);border:1px solid rgba(92,184,138,.2);color:var(--success)}
+.status-error{background:rgba(224,92,92,.1);border:1px solid rgba(224,92,92,.2);color:var(--danger)}
+.canvas-layout{display:flex;height:calc(100vh - 104px);gap:0}
+.canvas-sidebar-left{width:260px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius) 0 0 var(--radius);display:flex;flex-direction:column;overflow:hidden}
+.canvas-tabs{display:flex;border-bottom:1px solid var(--border)}
+.canvas-tab{flex:1;padding:10px 4px;font-size:11px;color:var(--muted);cursor:pointer;text-align:center;border:none;background:none;transition:all .15s;border-bottom:2px solid transparent}
+.canvas-tab.active{color:var(--accent);border-bottom-color:var(--accent)}
+.canvas-tab-content{flex:1;overflow-y:auto;padding:12px}
+.tool-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.tool-btn{background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius-sm);padding:12px 6px;display:flex;flex-direction:column;align-items:center;gap:5px;cursor:pointer;transition:all .15s;font-size:10px;color:var(--muted);line-height:1.2}
+.tool-btn:hover{border-color:var(--accent);color:var(--accent)}
+.tool-btn svg{width:20px;height:20px}
+.canvas-center{flex:1;background:var(--bg);display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+.canvas-wrap{position:relative;box-shadow:0 20px 60px rgba(0,0,0,.5)}
+#mainCanvas{display:block;cursor:crosshair}
+.canvas-toolbar{position:absolute;top:12px;left:50%;transform:translateX(-50%);background:var(--surface);border:1px solid var(--border);border-radius:99px;padding:6px 14px;display:flex;align-items:center;gap:12px}
+.canvas-tool-btn{background:none;border:none;color:var(--muted);cursor:pointer;padding:4px 8px;border-radius:6px;font-size:12px;transition:all .15s}
+.canvas-tool-btn:hover{background:rgba(212,168,83,.15);color:var(--accent)}
+.canvas-sidebar-right{width:220px;background:var(--surface);border:1px solid var(--border);border-radius:0 var(--radius) var(--radius) 0;padding:16px;display:flex;flex-direction:column;gap:14px;overflow-y:auto}
+.prop-group{display:flex;flex-direction:column;gap:6px}
+.prop-label{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
+.color-row{display:grid;grid-template-columns:repeat(6,1fr);gap:5px}
+.color-swatch{width:100%;aspect-ratio:1;border-radius:4px;cursor:pointer;border:2px solid transparent;transition:border-color .1s}
+.color-swatch:hover{border-color:var(--text)}
+input[type=range]{width:100%;accent-color:var(--accent)}
+input[type=color]{width:100%;height:34px;border:1px solid var(--border);border-radius:6px;background:var(--surface2);cursor:pointer;padding:2px 4px}
+.templates-header{display:flex;align-items:center;gap:14px;margin-bottom:20px;flex-wrap:wrap}
+.search-field{flex:1;min-width:200px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm);color:var(--text);font-family:'DM Sans',sans-serif;font-size:13px;padding:9px 14px;outline:none}
+.search-field:focus{border-color:var(--accent)}
+.templates-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:16px}
+.tpl-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;cursor:pointer;transition:all .2s;position:relative}
+.tpl-card:hover{border-color:var(--accent);transform:translateY(-3px);box-shadow:0 12px 32px rgba(0,0,0,.4)}
+.tpl-preview{height:140px;display:flex;align-items:center;justify-content:center;font-size:42px;position:relative}
+.tpl-overlay{position:absolute;inset:0;background:rgba(0,0,0,.6);opacity:0;display:flex;align-items:center;justify-content:center;gap:8px;transition:opacity .2s}
+.tpl-card:hover .tpl-overlay{opacity:1}
+.tpl-info{padding:12px 14px}
+.tpl-name{font-size:13px;font-weight:500;margin-bottom:2px}
+.tpl-cat{font-size:11px;color:var(--muted)}
+.tpl-pro-badge{position:absolute;top:8px;left:8px;background:var(--accent);color:var(--bg);font-size:9px;font-weight:700;padding:2px 7px;border-radius:99px;text-transform:uppercase}
+.prompts-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px}
+.prompt-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:16px;transition:all .2s}
+.prompt-card:hover{border-color:var(--accent)}
+.prompt-emoji{font-size:28px;margin-bottom:8px}
+.prompt-title{font-size:14px;font-weight:500;margin-bottom:6px}
+.prompt-text{font-size:12px;color:var(--muted);line-height:1.6;margin-bottom:12px}
+.prompt-tags{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:12px}
+.prompt-tag{font-size:10px;padding:2px 8px;background:var(--surface2);border-radius:99px;color:var(--muted)}
+.prompt-actions{display:flex;gap:8px}
+.copy-btn{flex:1;padding:8px;background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius-sm);font-size:12px;color:var(--muted);cursor:pointer;transition:all .15s;text-align:center}
+.copy-btn:hover{border-color:var(--accent);color:var(--accent)}
+.use-btn{flex:1;padding:8px;background:var(--accent);color:var(--bg);border:none;border-radius:var(--radius-sm);font-size:12px;font-weight:500;cursor:pointer;transition:opacity .15s;text-align:center}
+.use-btn:hover{opacity:.85}
+.guide-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px}
+.guide-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px}
+.guide-card-header{display:flex;align-items:center;gap:12px;margin-bottom:12px}
+.guide-logo{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
+.guide-card h4{font-size:15px;font-weight:500;margin-bottom:2px}
+.guide-card p{font-size:12px;color:var(--muted);line-height:1.7}
+.guide-steps{display:flex;flex-direction:column;gap:7px;margin-top:12px}
+.guide-step{display:flex;align-items:flex-start;gap:8px;font-size:12px;color:var(--muted);line-height:1.5}
+.step-num{width:18px;height:18px;border-radius:50%;background:rgba(212,168,83,.15);color:var(--accent);font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
+.guide-link{color:var(--accent);font-size:12px;display:inline-flex;align-items:center;gap:4px;margin-top:10px;text-decoration:none}
+.guide-link:hover{text-decoration:underline}
+.free-label{display:inline-flex;align-items:center;gap:4px;font-size:10px;padding:2px 8px;border-radius:99px;font-weight:600;margin-bottom:4px}
+.label-free{background:rgba(92,184,138,.15);color:var(--free)}
+.label-trial{background:rgba(212,168,83,.15);color:var(--accent)}
+.label-pago{background:rgba(232,130,74,.15);color:var(--paid)}
+.pricing-wrap{max-width:860px;margin:0 auto}
+.pricing-toggle{display:flex;align-items:center;gap:12px;margin-bottom:28px;justify-content:center}
+.toggle-switch{width:44px;height:24px;background:var(--surface2);border:1px solid var(--border);border-radius:99px;cursor:pointer;position:relative;transition:background .2s}
+.toggle-switch.on{background:var(--accent)}
+.toggle-switch::after{content:'';position:absolute;width:16px;height:16px;background:#fff;border-radius:50%;top:3px;left:4px;transition:left .2s}
+.toggle-switch.on::after{left:24px}
+.pricing-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.pricing-card{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:28px;display:flex;flex-direction:column;gap:16px}
+.pricing-card.featured{border-color:var(--accent);background:linear-gradient(160deg,var(--surface),rgba(212,168,83,.06))}
+.pricing-amount{font-family:'Playfair Display',serif;font-size:42px;font-weight:900}
+.pricing-features{display:flex;flex-direction:column;gap:8px;flex:1}
+.pricing-feature{display:flex;align-items:flex-start;gap:8px;font-size:13px}
+.feat-icon{width:16px;height:16px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;margin-top:1px;font-size:9px}
+.feat-yes{background:rgba(92,184,138,.2);color:var(--success)}
+.feat-no{background:rgba(138,135,153,.15);color:var(--muted)}
+.feat-no span{text-decoration:line-through;color:var(--muted)}
+.pricing-cta{padding:13px;border-radius:var(--radius-sm);font-size:14px;font-weight:600;cursor:pointer;border:none;transition:all .15s;width:100%}
+.cta-free{background:var(--surface2);color:var(--text);border:1px solid var(--border)}
+.cta-free:hover{border-color:var(--text)}
+.cta-pro{background:var(--accent);color:var(--bg)}
+.cta-pro:hover{opacity:.88}
+.modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:1000;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(4px);opacity:0;pointer-events:none;transition:opacity .2s}
+.modal-bg.open{opacity:1;pointer-events:all}
+.modal{background:var(--surface);border:1px solid var(--border);border-radius:20px;width:480px;max-width:95vw;padding:28px;position:relative}
+.modal h3{font-family:'Playfair Display',serif;font-size:22px;margin-bottom:8px}
+.modal p{font-size:13px;color:var(--muted);line-height:1.6;margin-bottom:20px}
+.modal-close{position:absolute;top:16px;right:16px;background:var(--surface2);border:1px solid var(--border);border-radius:50%;width:28px;height:28px;cursor:pointer;color:var(--muted);font-size:16px;display:flex;align-items:center;justify-content:center}
+.modal-close:hover{color:var(--text)}
+.modal-btns{display:flex;gap:10px}
+.notify{position:fixed;bottom:20px;right:20px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:12px 16px;font-size:13px;color:var(--text);display:flex;align-items:center;gap:8px;z-index:2000;transform:translateY(80px);opacity:0;transition:all .3s;box-shadow:0 8px 24px rgba(0,0,0,.4)}
+.notify.show{transform:translateY(0);opacity:1}
+</style>
+</head>
+<body>
+<div class="app">
+<aside class="sidebar">
+  <div class="sidebar-logo">
+    <div class="logo-mark">
+      <div class="logo-icon"><svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg></div>
+      <div class="logo-text"><span class="logo-name">Well Design</span><span class="logo-sub">Creative Studio</span></div>
+    </div>
+  </div>
+  <nav class="sidebar-nav">
+    <div class="nav-label">Principal</div>
+    <button class="nav-item active" onclick="goto('dashboard')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>Dashboard
+    </button>
+    <div class="nav-label">Criar</div>
+    <button class="nav-item" onclick="goto('ai-gen')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>Gerar com IA
+    </button>
+    <button class="nav-item" onclick="goto('canvas')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>Editor Canvas
+    </button>
+    <div class="nav-label">Explorar</div>
+    <button class="nav-item" onclick="goto('templates')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h6v6H4zM14 4h6v6h-6zM4 14h6v6H4zM14 14h6v6h-6z"/></svg>Templates
+    </button>
+    <button class="nav-item" onclick="goto('prompts')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>Prompts IA
+    </button>
+    <div class="nav-label">Configurar</div>
+    <button class="nav-item" onclick="goto('apis')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 010 14.14M4.93 4.93a10 10 0 000 14.14"/></svg>Guia de APIs
+      <span class="nav-badge badge-free">Grátis</span>
+    </button>
+    <button class="nav-item" onclick="goto('pricing')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>Planos
+    </button>
+  </nav>
+  <div class="sidebar-footer">
+    <div class="plan-card">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
+        <span style="font-size:11px;color:var(--muted)">Plano atual</span>
+        <span style="font-size:9px;padding:2px 7px;border-radius:99px;background:rgba(92,184,138,.2);color:var(--free);font-weight:600">FREE</span>
+      </div>
+      <div style="font-size:11px;color:var(--muted)">3 / 10 gerações usadas</div>
+      <div class="usage-bar"><div class="usage-fill"></div></div>
+      <button class="upgrade-btn" onclick="goto('pricing')">✦ Upgrade para PRO</button>
+    </div>
+  </div>
+</aside>
+
+<div class="main">
+  <header class="topbar">
+    <div class="topbar-title" id="topbar-title">Dashboard</div>
+    <div class="topbar-actions">
+      <button class="btn btn-ghost" onclick="goto('apis')">APIs Grátis ↗</button>
+      <button class="btn btn-accent" onclick="goto('ai-gen')">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>Nova criação
+      </button>
+      <div class="avatar">WD</div>
+    </div>
+  </header>
+  <div class="content">
+
+    <!-- DASHBOARD -->
+    <div class="page active" id="page-dashboard">
+      <div class="dash-hero">
+        <h2>Bem-vindo ao Well Design Creative ✦</h2>
+        <p>Crie imagens com IA, use o editor canvas ou personalize templates prontos. Comece grátis hoje!</p>
+        <div class="dash-hero-btns">
+          <button class="btn btn-accent" onclick="goto('ai-gen')">Gerar com IA</button>
+          <button class="btn btn-ghost" onclick="goto('canvas')">Editor Canvas</button>
+          <button class="btn btn-ghost" onclick="goto('apis')">APIs grátis</button>
+        </div>
+      </div>
+      <div class="stats-grid">
+        <div class="stat-card"><div class="stat-val">3</div><div class="stat-label">Imagens geradas</div></div>
+        <div class="stat-card"><div class="stat-val">4</div><div class="stat-label">APIs integradas</div></div>
+        <div class="stat-card"><div class="stat-val" style="color:var(--free)">2</div><div class="stat-label">APIs 100% grátis</div></div>
+        <div class="stat-card"><div class="stat-val" style="color:var(--free)">FREE</div><div class="stat-label">Plano atual</div></div>
+      </div>
+      <div class="section-title">Templates em destaque <span>Clique para abrir</span></div>
+      <div class="cards-grid" id="dash-templates"></div>
+      <div class="section-title" style="margin-top:24px">Prompts populares <span>Copie e use no gerador</span></div>
+      <div class="cards-grid" id="dash-prompts"></div>
+    </div>
+
+    <!-- AI GENERATOR -->
+    <div class="page" id="page-ai-gen">
+      <div class="ai-layout">
+        <div class="ai-panel">
+          <h3>✦ Gerador de Imagens IA</h3>
+          <div>
+            <div class="field-label">Prompt</div>
+            <textarea class="field" id="ai-prompt" placeholder="Descreva sua imagem com detalhes..."></textarea>
+          </div>
+          <div>
+            <div class="field-label">Estilo visual</div>
+            <div class="style-chips" id="style-chips">
+              <span class="chip active" onclick="selectChip(this)">Padrão</span>
+              <span class="chip" onclick="selectChip(this)">Fotorrealista</span>
+              <span class="chip" onclick="selectChip(this)">Arte digital</span>
+              <span class="chip" onclick="selectChip(this)">Aquarela</span>
+              <span class="chip" onclick="selectChip(this)">Óleo sobre tela</span>
+              <span class="chip" onclick="selectChip(this)">Anime</span>
+              <span class="chip" onclick="selectChip(this)">3D Render</span>
+              <span class="chip" onclick="selectChip(this)">Cyberpunk</span>
+            </div>
+          </div>
+          <div>
+            <div class="field-label">Proporção</div>
+            <div class="size-row">
+              <button class="size-btn active" onclick="selSize(this,'square')">1:1</button>
+              <button class="size-btn" onclick="selSize(this,'landscape')">16:9</button>
+              <button class="size-btn" onclick="selSize(this,'portrait')">9:16</button>
+            </div>
+          </div>
+          <div>
+            <div class="field-label">Selecione a API</div>
+            <div class="api-cards">
+              <div class="api-card selected" id="api-hf" onclick="selApi('hf')">
+                <div class="api-card-header">
+                  <div class="api-dot" style="background:#ffbd59"></div>
+                  <span class="api-card-name">Hugging Face — FLUX.1</span>
+                  <span class="api-tag tag-gratis">100% GRÁTIS</span>
+                </div>
+                <div class="api-card-body">
+                  <div class="api-guide">
+                    <b>Como obter grátis (sem cartão):</b><br>
+                    1. Acesse <a href="https://huggingface.co/join" target="_blank">huggingface.co/join</a><br>
+                    2. Crie conta gratuita<br>
+                    3. Settings → <b>Access Tokens → New token</b><br>
+                    4. Escolha <b>Read</b> e gere o token<br>
+                    5. Cole aqui (começa com <b>hf_...</b>)
+                  </div>
+                  <input class="field" id="key-hf" type="password" placeholder="hf_xxxxxxxxxxxxxxxx"/>
+                </div>
+              </div>
+              <div class="api-card" id="api-leonardo" onclick="selApi('leonardo')">
+                <div class="api-card-header">
+                  <div class="api-dot" style="background:#a78bfa"></div>
+                  <span class="api-card-name">Leonardo AI</span>
+                  <span class="api-tag tag-trial">$5 GRÁTIS</span>
+                </div>
+                <div class="api-card-body">
+                  <div class="api-guide">
+                    <b>Conta nova recebe $5 grátis:</b><br>
+                    1. Acesse <a href="https://app.leonardo.ai" target="_blank">app.leonardo.ai</a><br>
+                    2. Crie conta com Google ou email<br>
+                    3. Vá em <b>Settings → API Access</b><br>
+                    4. Clique em <b>Generate API key</b><br>
+                    5. Cole a chave abaixo
+                  </div>
+                  <input class="field" id="key-leonardo" type="password" placeholder="Chave Leonardo AI..."/>
+                </div>
+              </div>
+              <div class="api-card" id="api-openai" onclick="selApi('openai')">
+                <div class="api-card-header">
+                  <div class="api-dot" style="background:#10a37f"></div>
+                  <span class="api-card-name">DALL-E 3 — OpenAI</span>
+                  <span class="api-tag tag-pago">PAGO</span>
+                </div>
+                <div class="api-card-body">
+                  <div class="api-guide api-guide-warn">
+                    <b>Requer créditos (a partir de $5):</b><br>
+                    1. <a href="https://platform.openai.com/api-keys" target="_blank">platform.openai.com</a><br>
+                    2. Billing → Add payment method<br>
+                    3. API Keys → Create new key<br>
+                    4. Cole aqui (começa com <b>sk-...</b>)
+                  </div>
+                  <input class="field" id="key-openai" type="password" placeholder="sk-xxxxxxxxxxxxxxxx"/>
+                </div>
+              </div>
+              <div class="api-card" id="api-gemini" onclick="selApi('gemini')">
+                <div class="api-card-header">
+                  <div class="api-dot" style="background:#4285f4"></div>
+                  <span class="api-card-name">Imagen — Google Gemini</span>
+                  <span class="api-tag tag-pago">PAGO</span>
+                </div>
+                <div class="api-card-body">
+                  <div class="api-guide api-guide-warn">
+                    <b>Sem tier grátis desde nov/2025:</b><br>
+                    1. <a href="https://aistudio.google.com" target="_blank">aistudio.google.com</a><br>
+                    2. Ative cobrança no Google Cloud<br>
+                    3. Gere chave de API<br>
+                    4. Cole aqui (começa com <b>AIza...</b>)
+                  </div>
+                  <input class="field" id="key-gemini" type="password" placeholder="AIzaxxxxxxxxxxxxxxxx"/>
+                </div>
+              </div>
+            </div>
+          </div>
+          <button class="gen-btn" id="ai-gen-btn" onclick="generateAI()">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+            Gerar imagem
+          </button>
+        </div>
+        <div class="ai-results" id="ai-results">
+          <div class="results-placeholder" id="ai-placeholder">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M3 16l5-5 4 4 3-3 6 6"/></svg>
+            <p>Sua imagem aparecerá aqui</p>
+            <p style="font-size:11px;max-width:240px;text-align:center">Escolha uma API, cole a chave e clique em gerar</p>
+            <button class="btn btn-ghost" style="margin-top:8px" onclick="goto('apis')">Ver como obter API grátis ↗</button>
+          </div>
+          <div id="ai-status" style="display:none"></div>
+          <div id="ai-img-grid" style="display:none"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CANVAS -->
+    <div class="page" id="page-canvas">
+      <div class="canvas-layout">
+        <div class="canvas-sidebar-left">
+          <div class="canvas-tabs">
+            <button class="canvas-tab active" onclick="switchCanvasTab(this,'tools')">Ferramentas</button>
+            <button class="canvas-tab" onclick="switchCanvasTab(this,'elements')">Formas</button>
+            <button class="canvas-tab" onclick="switchCanvasTab(this,'text')">Texto</button>
+          </div>
+          <div class="canvas-tab-content" id="canvas-tab-tools">
+            <div class="field-label" style="margin-bottom:8px">Ferramentas</div>
+            <div class="tool-grid">
+              <button class="tool-btn" id="tool-pen" onclick="setTool('pen')">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>Caneta
+              </button>
+              <button class="tool-btn" id="tool-brush" onclick="setTool('brush')">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 17c0 1 .895 2 2 2s7-5 7-5 5 6 5 6c1.1 0 2-.9 2-2L7 5 3 17z"/></svg>Pincel
+              </button>
+              <button class="tool-btn" id="tool-rect" onclick="setTool('rect')">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/></svg>Retângulo
+              </button>
+              <button class="tool-btn" id="tool-circle" onclick="setTool('circle')">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/></svg>Círculo
+              </button>
+              <button class="tool-btn" id="tool-line" onclick="setTool('line')">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="19" x2="19" y2="5"/></svg>Linha
+              </button>
+              <button class="tool-btn" id="tool-eraser" onclick="setTool('eraser')">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 20H7L3 16l13-13 7 7-3 10z"/></svg>Borracha
+              </button>
+              <button class="tool-btn" onclick="undoCanvas()">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 10h10a8 8 0 018 8v2M3 10l6 6M3 10l6-6"/></svg>Desfazer
+              </button>
+              <button class="tool-btn" onclick="clearCanvas()">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M19 6l-1 14H6L5 6M10 11v6M14 11v6M8 6V4h8v2"/></svg>Limpar
+              </button>
+              <button class="tool-btn" onclick="downloadCanvas()">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>Baixar
+              </button>
+            </div>
+            <div class="field-label" style="margin-top:14px;margin-bottom:8px">Tamanho do canvas</div>
+            <div class="size-row">
+              <button class="size-btn active" onclick="resizeCanvas(600,600,this)">Post</button>
+              <button class="size-btn" onclick="resizeCanvas(800,450,this)">Banner</button>
+              <button class="size-btn" onclick="resizeCanvas(450,800,this)">Story</button>
+            </div>
+          </div>
+          <div class="canvas-tab-content" id="canvas-tab-elements" style="display:none">
+            <div class="field-label" style="margin-bottom:8px">Formas rápidas</div>
+            <div class="tool-grid">
+              <button class="tool-btn" onclick="addShape('star')">⭐<br>Estrela</button>
+              <button class="tool-btn" onclick="addShape('heart')">❤️<br>Coração</button>
+              <button class="tool-btn" onclick="addShape('arrow')">➡️<br>Seta</button>
+              <button class="tool-btn" onclick="addShape('cloud')">☁️<br>Nuvem</button>
+              <button class="tool-btn" onclick="addShape('diamond')">💎<br>Diamante</button>
+              <button class="tool-btn" onclick="addShape('check')">✅<br>Check</button>
+            </div>
+            <div class="field-label" style="margin-top:14px;margin-bottom:8px">Fundos</div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px">
+              <button class="tool-btn" style="font-size:10px" onclick="setBg('#1a1a2e')">Escuro</button>
+              <button class="tool-btn" style="font-size:10px" onclick="setBg('#ffffff')">Branco</button>
+              <button class="tool-btn" style="font-size:10px" onclick="setBg('grad1')">Gradiente</button>
+              <button class="tool-btn" style="font-size:10px" onclick="setBg('#f5e6d3')">Creme</button>
+            </div>
+          </div>
+          <div class="canvas-tab-content" id="canvas-tab-text" style="display:none">
+            <div class="field-label" style="margin-bottom:8px">Adicionar texto</div>
+            <input class="field" id="txt-input" placeholder="Digite seu texto..." style="margin-bottom:8px"/>
+            <select class="field" id="txt-font" style="margin-bottom:8px">
+              <option value="Playfair Display">Playfair Display</option>
+              <option value="DM Sans">DM Sans</option>
+              <option value="Georgia">Georgia</option>
+              <option value="Impact">Impact</option>
+            </select>
+            <div class="field-label" style="margin-bottom:6px">Tamanho: <span id="txt-size-val">32px</span></div>
+            <input type="range" min="12" max="96" value="32" id="txt-size" oninput="document.getElementById('txt-size-val').textContent=this.value+'px'" style="margin-bottom:10px"/>
+            <button class="gen-btn" style="padding:10px;font-size:13px" onclick="addTextToCanvas()">Adicionar ao canvas</button>
+          </div>
+        </div>
+        <div class="canvas-center">
+          <div class="canvas-toolbar">
+            <button class="canvas-tool-btn" onclick="setTool('pen')">✏️ Caneta</button>
+            <button class="canvas-tool-btn" onclick="setTool('eraser')">🧹 Borracha</button>
+            <span style="color:var(--border);font-size:16px">|</span>
+            <button class="canvas-tool-btn" onclick="undoCanvas()">↩ Desfazer</button>
+            <button class="canvas-tool-btn" onclick="downloadCanvas()">⬇ Baixar PNG</button>
+          </div>
+          <div class="canvas-wrap">
+            <canvas id="mainCanvas" width="600" height="600"></canvas>
+          </div>
+        </div>
+        <div class="canvas-sidebar-right">
+          <div class="prop-group">
+            <div class="prop-label">Cor ativa</div>
+            <input type="color" id="draw-color" value="#d4a853" onchange="updateColor(this.value)"/>
+          </div>
+          <div class="prop-group">
+            <div class="prop-label">Paleta rápida</div>
+            <div class="color-row" id="palette-row"></div>
+          </div>
+          <div class="prop-group">
+            <div class="prop-label">Espessura: <span id="brush-size-label">4px</span></div>
+            <input type="range" min="1" max="40" value="4" id="brush-size" oninput="updateBrushSize(this.value)"/>
+          </div>
+          <div class="prop-group">
+            <div class="prop-label">Opacidade: <span id="opacity-label">100%</span></div>
+            <input type="range" min="10" max="100" value="100" id="brush-opacity" oninput="updateOpacity(this.value)"/>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TEMPLATES -->
+    <div class="page" id="page-templates">
+      <div class="templates-header">
+        <input class="search-field" placeholder="Buscar templates..." id="tpl-search" oninput="renderTemplates(this.value,currentTplCat)"/>
+        <div class="filter-chips" id="tpl-filters"></div>
+      </div>
+      <div class="templates-grid" id="templates-grid"></div>
+    </div>
+
+    <!-- PROMPTS IA -->
+    <div class="page" id="page-prompts">
+      <div style="margin-bottom:20px;display:flex;align-items:center;gap:14px;flex-wrap:wrap">
+        <input class="search-field" placeholder="Buscar prompts..." style="max-width:300px" oninput="renderPrompts(this.value,currentPromptCat)" id="prompt-search"/>
+        <div class="filter-chips" id="prompt-filters"></div>
+      </div>
+      <div class="prompts-grid" id="prompts-grid"></div>
+    </div>
+
+    <!-- GUIA DE APIs -->
+    <div class="page" id="page-apis">
+      <div style="margin-bottom:24px">
+        <h2 style="font-family:'Playfair Display',serif;font-size:24px;font-weight:700;margin-bottom:6px">Guia de APIs de IA</h2>
+        <p style="color:var(--muted);font-size:13px">Passo a passo para obter sua chave e começar a gerar imagens agora</p>
+      </div>
+      <div class="guide-grid">
+        <div class="guide-card" style="border-color:rgba(92,184,138,.3)">
+          <div class="guide-card-header">
+            <div class="guide-logo" style="background:rgba(255,189,89,.15)">🤗</div>
+            <div>
+              <span class="free-label label-free">100% GRÁTIS — SEM CARTÃO</span>
+              <h4>Hugging Face (FLUX.1)</h4>
+            </div>
+          </div>
+          <p>O modelo FLUX.1 da Black Forest Labs gera imagens incríveis e é totalmente gratuito via Hugging Face.</p>
+          <div class="guide-steps">
+            <div class="guide-step"><span class="step-num">1</span>Acesse <strong>huggingface.co</strong> e crie uma conta</div>
+            <div class="guide-step"><span class="step-num">2</span>Clique no seu avatar no canto superior direito</div>
+            <div class="guide-step"><span class="step-num">3</span>Vá em <strong>Settings → Access Tokens</strong></div>
+            <div class="guide-step"><span class="step-num">4</span>Clique em <strong>New token</strong>, escolha <strong>Read</strong></div>
+            <div class="guide-step"><span class="step-num">5</span>Copie o token (começa com <strong>hf_...</strong>) e cole no gerador</div>
+          </div>
+          <a class="guide-link" href="https://huggingface.co/join" target="_blank">Criar conta grátis ↗</a>
+        </div>
+        <div class="guide-card" style="border-color:rgba(212,168,83,.3)">
+          <div class="guide-card-header">
+            <div class="guide-logo" style="background:rgba(167,139,250,.15)">🎨</div>
+            <div>
+              <span class="free-label label-trial">$5 GRÁTIS AO CRIAR CONTA</span>
+              <h4>Leonardo AI</h4>
+            </div>
+          </div>
+          <p>Toda conta nova recebe $5 de crédito de API gratuito. Alta qualidade para arte e ilustração.</p>
+          <div class="guide-steps">
+            <div class="guide-step"><span class="step-num">1</span>Acesse <strong>app.leonardo.ai</strong></div>
+            <div class="guide-step"><span class="step-num">2</span>Crie conta gratuita com Google ou email</div>
+            <div class="guide-step"><span class="step-num">3</span>Vá em <strong>Settings → API Access</strong></div>
+            <div class="guide-step"><span class="step-num">4</span>Clique em <strong>Generate API key</strong></div>
+            <div class="guide-step"><span class="step-num">5</span>Cole a chave no campo do gerador</div>
+          </div>
+          <a class="guide-link" href="https://app.leonardo.ai" target="_blank">Acessar Leonardo AI ↗</a>
+        </div>
+        <div class="guide-card">
+          <div class="guide-card-header">
+            <div class="guide-logo" style="background:rgba(16,163,127,.15)">🤖</div>
+            <div>
+              <span class="free-label label-pago">PAGO — a partir de $5</span>
+              <h4>OpenAI — DALL-E 3</h4>
+            </div>
+          </div>
+          <p>Alta qualidade de imagem. Cada imagem custa aproximadamente $0,04. Precisa adicionar créditos.</p>
+          <div class="guide-steps">
+            <div class="guide-step"><span class="step-num">1</span>Acesse <strong>platform.openai.com</strong></div>
+            <div class="guide-step"><span class="step-num">2</span>Vá em <strong>Billing → Add payment method</strong></div>
+            <div class="guide-step"><span class="step-num">3</span>Adicione créditos (mínimo $5)</div>
+            <div class="guide-step"><span class="step-num">4</span>Vá em <strong>API Keys → Create new key</strong></div>
+            <div class="guide-step"><span class="step-num">5</span>Copie a chave (começa com <strong>sk-...</strong>)</div>
+          </div>
+          <a class="guide-link" href="https://platform.openai.com/api-keys" target="_blank">Acessar OpenAI ↗</a>
+        </div>
+        <div class="guide-card">
+          <div class="guide-card-header">
+            <div class="guide-logo" style="background:rgba(66,133,244,.15)">🔵</div>
+            <div>
+              <span class="free-label label-pago">PAGO — sem tier grátis</span>
+              <h4>Google Gemini — Imagen</h4>
+            </div>
+          </div>
+          <p>Atenção: desde novembro de 2025 não há mais camada gratuita para geração de imagens via API.</p>
+          <div class="guide-steps">
+            <div class="guide-step"><span class="step-num">1</span>Acesse <strong>aistudio.google.com</strong></div>
+            <div class="guide-step"><span class="step-num">2</span>Ative faturamento no <strong>Google Cloud</strong></div>
+            <div class="guide-step"><span class="step-num">3</span>Vá em <strong>Get API Key → Create API Key</strong></div>
+            <div class="guide-step"><span class="step-num">4</span>Copie a chave (começa com <strong>AIza...</strong>)</div>
+          </div>
+          <a class="guide-link" href="https://aistudio.google.com" target="_blank">Acessar Google AI Studio ↗</a>
+        </div>
+      </div>
+      <div style="margin-top:24px;background:var(--surface);border:1px solid rgba(92,184,138,.2);border-radius:var(--radius);padding:20px">
+        <div style="font-size:14px;font-weight:500;color:var(--success);margin-bottom:8px">💡 Dica: Comece sem gastar nada</div>
+        <p style="font-size:13px;color:var(--muted);line-height:1.7">Use o <strong style="color:var(--text)">Hugging Face</strong> (FLUX.1 — sem cartão, 100% grátis) ou o <strong style="color:var(--text)">Leonardo AI</strong> (conta nova recebe $5 grátis). Com essas duas APIs você já gera dezenas de imagens incríveis sem pagar nada!</p>
+        <button class="btn btn-accent" style="margin-top:12px" onclick="goto('ai-gen')">Começar a gerar agora ↗</button>
+      </div>
+    </div>
+
+    <!-- PRICING -->
+    <div class="page" id="page-pricing">
+      <div class="pricing-wrap">
+        <div style="text-align:center;margin-bottom:28px">
+          <h2 style="font-family:'Playfair Display',serif;font-size:32px;font-weight:900;margin-bottom:8px">Escolha seu plano</h2>
+          <p style="color:var(--muted);font-size:14px">Comece grátis. Faça upgrade quando precisar de mais.</p>
+        </div>
+        <div class="pricing-toggle">
+          <span style="font-size:14px;color:var(--muted)">Mensal</span>
+          <div class="toggle-switch" id="billing-toggle" onclick="toggleBilling()"></div>
+          <span style="font-size:14px;color:var(--muted)">Anual <span style="background:rgba(92,184,138,.2);color:var(--free);font-size:11px;padding:2px 7px;border-radius:99px;margin-left:4px">-30%</span></span>
+        </div>
+        <div class="pricing-grid">
+          <div class="pricing-card">
+            <div style="font-size:11px;text-transform:uppercase;letter-spacing:.1em;color:var(--muted)">Gratuito</div>
+            <div style="display:flex;align-items:baseline;gap:4px">
+              <span class="pricing-amount" style="color:#6b8cba">R$0</span>
+              <span style="font-size:13px;color:var(--muted)">/ mês</span>
+            </div>
+            <div style="font-size:13px;color:var(--muted);line-height:1.6">Para quem está começando.</div>
+            <div class="pricing-features">
+              <div class="pricing-feature"><span class="feat-icon feat-yes">✓</span><span>10 gerações de IA por mês</span></div>
+              <div class="pricing-feature"><span class="feat-icon feat-yes">✓</span><span>Editor canvas completo</span></div>
+              <div class="pricing-feature"><span class="feat-icon feat-yes">✓</span><span>20 templates gratuitos</span></div>
+              <div class="pricing-feature"><span class="feat-icon feat-yes">✓</span><span>Prompts de IA prontos</span></div>
+              <div class="pricing-feature"><span class="feat-icon feat-yes">✓</span><span>APIs Hugging Face e Leonardo</span></div>
+              <div class="pricing-feature"><span class="feat-icon feat-yes">✓</span><span>Download em PNG</span></div>
+              <div class="pricing-feature"><span class="feat-icon feat-no"><span>Templates PRO exclusivos</span></span></div>
+              <div class="pricing-feature"><span class="feat-icon feat-no"><span>Exportar em alta resolução</span></span></div>
+              <div class="pricing-feature"><span class="feat-icon feat-no"><span>Gerações ilimitadas</span></span></div>
+            </div>
+            <button class="pricing-cta cta-free" onclick="showNotify('Você já está no plano Free!')">Plano atual</button>
+          </div>
+          <div class="pricing-card featured">
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px">
+              <div style="font-size:11px;text-transform:uppercase;letter-spacing:.1em;color:var(--muted)">PRO</div>
+              <span style="background:var(--accent);color:var(--bg);font-size:9px;padding:2px 7px;border-radius:99px;font-weight:700">MAIS POPULAR</span>
+            </div>
+            <div style="display:flex;align-items:baseline;gap:4px">
+              <span class="pricing-amount" style="color:var(--accent)" id="pro-price">R$39</span>
+              <span style="font-size:13px;color:var(--muted)">/ mês</span>
+            </div>
+            <div style="font-size:13px;color:var(--muted);line-height:1.6">Para criadores sérios.</div>
+            <div class="pricing-features">
+              <div class="pricing-feature"><span class="feat-icon feat-yes">✓</span><span><strong>Gerações ilimitadas</strong></span></div>
+              <div class="pricing-feature"><span class="feat-icon feat-yes">✓</span><span>Todas as APIs (OpenAI, Gemini, HF, Leonardo)</span></div>
+              <div class="pricing-feature"><span class="feat-icon feat-yes">✓</span><span><strong>200+ templates PRO</strong></span></div>
+              <div class="pricing-feature"><span class="feat-icon feat-yes">✓</span><span>Exportar em 4K / alta resolução</span></div>
+              <div class="pricing-feature"><span class="feat-icon feat-yes">✓</span><span>Remoção de fundo com IA</span></div>
+              <div class="pricing-feature"><span class="feat-icon feat-yes">✓</span><span>Prompts PRO exclusivos</span></div>
+              <div class="pricing-feature"><span class="feat-icon feat-yes">✓</span><span>Suporte prioritário</span></div>
+            </div>
+            <button class="pricing-cta cta-pro" onclick="openUpgradeModal()">✦ Assinar PRO agora</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+</div>
+
+<div class="modal-bg" id="upgrade-modal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <div style="font-size:28px;margin-bottom:8px">✦</div>
+    <h3>Upgrade para o PRO</h3>
+    <p>Desbloqueie gerações ilimitadas, 200+ templates exclusivos e exportação em alta resolução.</p>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:20px">
+      <div style="display:flex;align-items:center;gap:6px;font-size:12px"><span style="color:var(--success)">✓</span>Gerações ilimitadas</div>
+      <div style="display:flex;align-items:center;gap:6px;font-size:12px"><span style="color:var(--success)">✓</span>Templates PRO</div>
+      <div style="display:flex;align-items:center;gap:6px;font-size:12px"><span style="color:var(--success)">✓</span>Exportar em 4K</div>
+      <div style="display:flex;align-items:center;gap:6px;font-size:12px"><span style="color:var(--success)">✓</span>Remover fundo IA</div>
+    </div>
+    <div class="modal-btns">
+      <button class="btn btn-ghost" onclick="closeModal()" style="flex:1">Agora não</button>
+      <button class="btn btn-accent" onclick="showNotify('Em breve: integração com pagamento!');closeModal()" style="flex:2;justify-content:center">✦ Assinar por R$39/mês</button>
+    </div>
+  </div>
+</div>
+<div class="notify" id="notify-toast"></div>
+
+<script>
+const pages=['dashboard','ai-gen','canvas','templates','prompts','apis','pricing'];
+const titles={'dashboard':'Dashboard','ai-gen':'Gerar com IA','canvas':'Editor Canvas','templates':'Templates','prompts':'Prompts de IA','apis':'Guia de APIs Grátis','pricing':'Planos & Preços'};
+function goto(p){
+  pages.forEach(x=>{document.getElementById('page-'+x)?.classList.remove('active');});
+  document.querySelectorAll('.nav-item').forEach(n=>{n.classList.toggle('active',(n.getAttribute('onclick')||'').includes("'"+p+"'"));});
+  document.getElementById('page-'+p)?.classList.add('active');
+  document.getElementById('topbar-title').textContent=titles[p]||p;
+  if(p==='canvas')initCanvas();
+}
+const templateData=[
+  {name:'Post Instagram',cat:'Social',emoji:'📸',bg:'linear-gradient(135deg,#667eea,#764ba2)',free:true},
+  {name:'Story Moderno',cat:'Social',emoji:'📱',bg:'linear-gradient(135deg,#f093fb,#f5576c)',free:true},
+  {name:'Banner YouTube',cat:'Banner',emoji:'🎬',bg:'linear-gradient(135deg,#4facfe,#00f2fe)',free:true},
+  {name:'Logo Minimalista',cat:'Logo',emoji:'✦',bg:'linear-gradient(135deg,#1a1a2e,#16213e)',free:true},
+  {name:'Capa eBook',cat:'Livro',emoji:'📖',bg:'linear-gradient(135deg,#43e97b,#38f9d7)',free:true},
+  {name:'Cartão de Visita',cat:'Negócios',emoji:'💼',bg:'linear-gradient(135deg,#fa709a,#fee140)',free:true},
+  {name:'Flyer Evento',cat:'Marketing',emoji:'🎉',bg:'linear-gradient(135deg,#a18cd1,#fbc2eb)',free:false},
+  {name:'Thumbnail Blog',cat:'Blog',emoji:'✍️',bg:'linear-gradient(135deg,#ffecd2,#fcb69f)',free:false},
+  {name:'Apresentação Pro',cat:'Slides',emoji:'🖥️',bg:'linear-gradient(135deg,#2d3436,#636e72)',free:false},
+  {name:'Infográfico',cat:'Marketing',emoji:'📊',bg:'linear-gradient(135deg,#00c6ff,#0072ff)',free:false},
+  {name:'Menu Restaurante',cat:'Gastronomia',emoji:'🍽️',bg:'linear-gradient(135deg,#f7971e,#ffd200)',free:false},
+  {name:'Capa Playlist',cat:'Música',emoji:'🎵',bg:'linear-gradient(135deg,#12c2e9,#c471ed,#f64f59)',free:false},
+];
+const promptData=[
+  {emoji:'🌅',title:'Pôr do sol épico',text:'A breathtaking sunset over a misty mountain range, golden hour light, volumetric clouds, photorealistic, 8K, cinematic composition',tags:['natureza','fotorrealista'],free:true},
+  {emoji:'🤖',title:'Robô futurista',text:'Sleek futuristic robot with chrome and neon accents, standing in a cyberpunk city at night, rain reflections, dramatic lighting, digital art style',tags:['cyberpunk','tecnologia'],free:true},
+  {emoji:'🧚',title:'Fada encantada',text:'A magical fairy with iridescent wings sitting on a glowing mushroom in an enchanted forest, bioluminescent plants, soft purple glow, fantasy art style',tags:['fantasia','mágico'],free:true},
+  {emoji:'🏙️',title:'Cidade do futuro',text:'Sprawling futuristic megacity with flying vehicles, vertical gardens on skyscrapers, golden sunset, isometric view, hyperdetailed illustration',tags:['cidade','futuro'],free:true},
+  {emoji:'🌊',title:'Oceano profundo',text:'Deep ocean scene with bioluminescent creatures, massive sea turtle, rays of light piercing dark water, photorealistic underwater photography style',tags:['oceano','natureza'],free:true},
+  {emoji:'🍕',title:'Food photography',text:'Artisan pizza with colorful toppings, fresh basil, melted mozzarella, rustic wooden table, soft natural window light, food photography, appetizing, 4K',tags:['comida','fotografia'],free:true},
+  {emoji:'🐉',title:'Dragão majestoso',text:'Ancient dragon perched on a crystal mountain peak, scales reflecting moonlight, storm clouds, epic fantasy, oil painting style, dramatic shadows',tags:['fantasia','épico'],free:false},
+  {emoji:'🎨',title:'Arte abstrata',text:'Abstract expressionist painting with bold brushstrokes, deep blues and warm oranges, Kandinsky inspired, high contrast, textured canvas, museum quality',tags:['abstrato','arte'],free:false},
+  {emoji:'🌺',title:'Jardim japonês',text:'Traditional Japanese garden in spring, cherry blossom petals floating on a koi pond, stone lanterns, morning mist, watercolor style, peaceful atmosphere',tags:['japão','natureza'],free:false},
+  {emoji:'🚀',title:'Astronauta no espaço',text:'Astronaut floating near a colorful nebula, distant galaxies, Earth visible in background, ultra-realistic space photography, NASA style, awe-inspiring',tags:['espaço','sci-fi'],free:false},
+  {emoji:'🦁',title:'Leão nobre',text:'Majestic lion portrait, golden hour lighting, detailed fur texture, intense amber eyes, African savanna background, National Geographic style photography',tags:['animal','fotorrealista'],free:false},
+  {emoji:'👑',title:'Retrato real',text:'Regal portrait of a queen in elaborate renaissance costume, dramatic chiaroscuro lighting, oil painting technique, museum quality, intricate golden crown',tags:['retrato','histórico'],free:false},
+];
+function renderDashTemplates(){
+  document.getElementById('dash-templates').innerHTML=templateData.slice(0,6).map(t=>`
+    <div class="template-card" onclick="goto('canvas')">
+      <div class="template-thumb"><div class="template-thumb-gradient" style="background:${t.bg}">${t.emoji}</div></div>
+      <div class="template-info"><div class="template-name">${t.name}</div><div class="template-type">${t.cat} · ${t.free?'<span style="color:var(--free)">Grátis</span>':'<span style="color:var(--accent)">PRO</span>'}</div></div>
+    </div>`).join('');
+}
+function renderDashPrompts(){
+  document.getElementById('dash-prompts').innerHTML=promptData.slice(0,4).map(p=>`
+    <div class="template-card" style="padding:14px">
+      <div style="font-size:24px;margin-bottom:6px">${p.emoji}</div>
+      <div class="template-name">${p.title}</div>
+      <div class="template-type" style="margin-bottom:8px">${p.tags.join(' · ')}</div>
+      <button class="copy-btn" onclick="copyPrompt(event,'${encodeURIComponent(p.text)}')">Copiar prompt</button>
+    </div>`).join('');
+}
+let currentTplCat='';
+function renderTemplates(filter='',cat=''){
+  const items=templateData.filter(t=>(!filter||t.name.toLowerCase().includes(filter.toLowerCase()))&&(!cat||t.cat===cat));
+  document.getElementById('templates-grid').innerHTML=items.map(t=>`
+    <div class="tpl-card" onclick="${t.free?'goto(\'canvas\')':'openUpgradeModal()'}">
+      ${!t.free?'<div class="tpl-pro-badge">PRO</div>':''}
+      <div class="tpl-preview" style="background:${t.bg}">${t.emoji}
+        <div class="tpl-overlay">
+          <button class="img-btn" onclick="event.stopPropagation();goto('canvas')">Editar</button>
+          <button class="img-btn" onclick="event.stopPropagation();${t.free?'showNotify(\'Template carregado!\')':'openUpgradeModal()'}">Usar</button>
+        </div>
+      </div>
+      <div class="tpl-info"><div class="tpl-name">${t.name}</div><div class="tpl-cat">${t.cat} · ${t.free?'<span style="color:var(--free)">Grátis</span>':'<span style="color:var(--accent)">PRO</span>'}</div></div>
+    </div>`).join('');
+}
+function renderTplFilters(){
+  const cats=[...new Set(templateData.map(t=>t.cat))];
+  document.getElementById('tpl-filters').innerHTML=['Todos',...cats].map((c,i)=>`<span class="chip ${i===0?'active':''}" onclick="selectFilter(this,'tpl')">${c}</span>`).join('');
+}
+function selectFilter(el,type){
+  el.parentElement.querySelectorAll('.chip').forEach(c=>c.classList.remove('active'));el.classList.add('active');
+  const val=el.textContent==='Todos'?'':el.textContent;
+  if(type==='tpl'){currentTplCat=val;renderTemplates(document.getElementById('tpl-search').value,val);}
+  else{currentPromptCat=val;renderPrompts(document.getElementById('prompt-search').value,val);}
+}
+let currentPromptCat='';
+function renderPrompts(filter='',tag=''){
+  const items=promptData.filter(p=>(!filter||p.title.toLowerCase().includes(filter)||p.text.toLowerCase().includes(filter))&&(!tag||p.tags.includes(tag)));
+  document.getElementById('prompts-grid').innerHTML=items.map(p=>`
+    <div class="prompt-card">
+      <div class="prompt-emoji">${p.emoji}</div>
+      <div class="prompt-title">${p.title}${!p.free?' <span style="background:rgba(212,168,83,.15);color:var(--accent);font-size:9px;padding:2px 6px;border-radius:99px">PRO</span>':''}</div>
+      <div class="prompt-text">${p.text.length>120?p.text.slice(0,120)+'...':p.text}</div>
+      <div class="prompt-tags">${p.tags.map(t=>`<span class="prompt-tag">${t}</span>`).join('')}</div>
+      <div class="prompt-actions">
+        <button class="copy-btn" onclick="copyPrompt(event,'${encodeURIComponent(p.text)}')">Copiar</button>
+        <button class="use-btn" onclick="${p.free?`usePrompt('${encodeURIComponent(p.text)}')`:'openUpgradeModal()'}">Usar no gerador</button>
+      </div>
+    </div>`).join('');
+}
+function renderPromptFilters(){
+  const tags=[...new Set(promptData.flatMap(p=>p.tags))].slice(0,8);
+  document.getElementById('prompt-filters').innerHTML=['Todos',...tags].map((c,i)=>`<span class="chip ${i===0?'active':''}" onclick="selectFilter(this,'prompt')">${c}</span>`).join('');
+}
+function copyPrompt(e,encoded){e.stopPropagation();navigator.clipboard.writeText(decodeURIComponent(encoded)).catch(()=>{});showNotify('Prompt copiado! ✦');}
+function usePrompt(encoded){document.getElementById('ai-prompt').value=decodeURIComponent(encoded);goto('ai-gen');showNotify('Prompt carregado no gerador!');}
+let selStyle='Padrão',selSizeKey='square',selApiKey='hf';
+function selectChip(el){document.querySelectorAll('#style-chips .chip').forEach(c=>c.classList.remove('active'));el.classList.add('active');selStyle=el.textContent;}
+function selSize(btn,s){document.querySelectorAll('.size-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');selSizeKey=s;}
+function selApi(name){
+  ['hf','leonardo','openai','gemini'].forEach(n=>document.getElementById('api-'+n)?.classList.remove('selected'));
+  document.getElementById('api-'+name)?.classList.add('selected');selApiKey=name;
+}
+async function generateAI(){
+  const prompt=document.getElementById('ai-prompt').value.trim();
+  if(!prompt){showNotify('Digite um prompt para gerar a imagem');return;}
+  const keyMap={hf:'key-hf',leonardo:'key-leonardo',openai:'key-openai',gemini:'key-gemini'};
+  const key=document.getElementById(keyMap[selApiKey])?.value.trim();
+  if(!key){showNotify('Cole sua chave de API no campo da API selecionada');return;}
+  const btn=document.getElementById('ai-gen-btn');
+  btn.disabled=true;btn.innerHTML='<div style="width:18px;height:18px;border:2px solid rgba(0,0,0,.3);border-top-color:var(--bg);border-radius:50%;animation:spin .7s linear infinite"></div> Gerando...';
+  const statusEl=document.getElementById('ai-status');
+  statusEl.style.display='block';statusEl.className='status-bar status-loading';statusEl.textContent='⚡ Conectando à API...';
+  document.getElementById('ai-placeholder').style.display='none';
+  document.getElementById('ai-img-grid').style.display='none';
+  const fullPrompt=selStyle&&selStyle!=='Padrão'?prompt+', '+selStyle:prompt;
+  try{
+    let imgUrl='',isBlob=false;
+    if(selApiKey==='hf'){
+      statusEl.textContent='⚡ Gerando com FLUX.1 (Hugging Face)...';
+      const r=await fetch('https://api-inference.huggingface.co/models/black-forest-labs/FLUX.1-dev',{
+        method:'POST',headers:{'Authorization':'Bearer '+key,'Content-Type':'application/json'},
+        body:JSON.stringify({inputs:fullPrompt})
+      });
+      if(!r.ok){const t=await r.text();throw new Error('Hugging Face: '+t.slice(0,120));}
+      const blob=await r.blob();imgUrl=URL.createObjectURL(blob);isBlob=true;
+    } else if(selApiKey==='leonardo'){
+      statusEl.textContent='⚡ Enviando para Leonardo AI...';
+      const genRes=await fetch('https://cloud.leonardo.ai/api/rest/v1/generations',{
+        method:'POST',headers:{'Authorization':'Bearer '+key,'Content-Type':'application/json'},
+        body:JSON.stringify({prompt:fullPrompt,modelId:'b24e16ff-06e3-43eb-8d33-4416c2d75876',width:1024,height:1024,num_images:1})
+      });
+      if(!genRes.ok){const e=await genRes.json();throw new Error('Leonardo: '+(e.error||JSON.stringify(e)).slice(0,120));}
+      const genData=await genRes.json();
+      const genId=genData.sdGenerationJob?.generationId;
+      if(!genId)throw new Error('Leonardo: ID de geração não retornado');
+      statusEl.textContent='⏳ Processando imagem no Leonardo AI...';
+      for(let i=0;i<20;i++){
+        await new Promise(r=>setTimeout(r,3000));
+        const pollRes=await fetch(`https://cloud.leonardo.ai/api/rest/v1/generations/${genId}`,{headers:{'Authorization':'Bearer '+key}});
+        const pollData=await pollRes.json();
+        const imgs=pollData.generations_by_pk?.generated_images;
+        if(imgs&&imgs.length>0){imgUrl=imgs[0].url;break;}
+      }
+      if(!imgUrl)throw new Error('Leonardo: timeout esperando imagem');
+    } else if(selApiKey==='openai'){
+      statusEl.textContent='⚡ Gerando com DALL-E 3 (OpenAI)...';
+      const sizeMap={square:'1024x1024',landscape:'1792x1024',portrait:'1024x1792'};
+      const r=await fetch('https://api.openai.com/v1/images/generations',{
+        method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+key},
+        body:JSON.stringify({model:'dall-e-3',prompt:fullPrompt,n:1,size:sizeMap[selSizeKey]||'1024x1024',response_format:'url'})
+      });
+      if(!r.ok){const e=await r.json();throw new Error('OpenAI: '+(e.error?.message||'erro'));}
+      const d=await r.json();imgUrl=d.data?.[0]?.url||'';
+    } else if(selApiKey==='gemini'){
+      statusEl.textContent='⚡ Gerando com Imagen (Google)...';
+      const r=await fetch('https://generativelanguage.googleapis.com/v1beta/models/imagen-3.0-generate-001:predict?key='+key,{
+        method:'POST',headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({instances:[{prompt:fullPrompt}],parameters:{sampleCount:1}})
+      });
+      if(!r.ok){const e=await r.json();throw new Error('Gemini: '+(e.error?.message||'erro'));}
+      const d=await r.json();
+      const b64=d.predictions?.[0]?.bytesBase64Encoded;
+      imgUrl=b64?'data:image/png;base64,'+b64:'';
+    }
+    if(!imgUrl)throw new Error('Nenhuma imagem retornada pela API');
+    statusEl.className='status-bar status-success';statusEl.textContent='✦ Imagem gerada com sucesso!';
+    const grid=document.getElementById('ai-img-grid');
+    grid.style.display='block';
+    grid.innerHTML=`<div class="result-img-wrap"><img src="${imgUrl}" alt="Imagem gerada"/><div class="img-overlay"><button class="img-btn" onclick="window.open('${isBlob?imgUrl:imgUrl}','_blank')">🔍 Abrir</button><a class="img-btn" href="${imgUrl}" download="well-design-creative.png">⬇ Baixar</a></div></div>`;
+    showNotify('Imagem gerada com sucesso! ✦');
+  }catch(err){
+    statusEl.className='status-bar status-error';statusEl.textContent='❌ Erro: '+err.message;
+    document.getElementById('ai-placeholder').style.display='flex';
+  }
+  btn.disabled=false;btn.innerHTML='<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg> Gerar imagem';
+}
+let canvas,ctx,drawing=false,tool='pen',color='#d4a853',brushSize=4,opacity=1,history=[],startX,startY;
+const palette=['#d4a853','#e05c5c','#5cb88a','#4a90d9','#a855f7','#f97316','#ffffff','#1a1a2e','#e8c97a','#6b8cba','#f0ede8','#333333'];
+function initCanvas(){
+  if(canvas)return;
+  canvas=document.getElementById('mainCanvas');ctx=canvas.getContext('2d');
+  fillBg('#1a1a2e');saveHistory();
+  canvas.addEventListener('mousedown',startDraw);canvas.addEventListener('mousemove',draw);canvas.addEventListener('mouseup',endDraw);canvas.addEventListener('mouseleave',endDraw);
+  canvas.addEventListener('touchstart',e=>{e.preventDefault();const t=e.touches[0];const r=canvas.getBoundingClientRect();startDraw({offsetX:t.clientX-r.left,offsetY:t.clientY-r.top});},{passive:false});
+  canvas.addEventListener('touchmove',e=>{e.preventDefault();const t=e.touches[0];const r=canvas.getBoundingClientRect();draw({offsetX:t.clientX-r.left,offsetY:t.clientY-r.top});},{passive:false});
+  canvas.addEventListener('touchend',endDraw);
+  renderPalette();
+}
+function fillBg(c){if(!ctx)return;ctx.fillStyle=c;ctx.fillRect(0,0,canvas.width,canvas.height);}
+function saveHistory(){if(!canvas)return;history.push(canvas.toDataURL());if(history.length>20)history.shift();}
+function undoCanvas(){if(history.length<2){showNotify('Nada para desfazer');return;}history.pop();const img=new Image();img.onload=()=>ctx.drawImage(img,0,0);img.src=history[history.length-1];}
+function startDraw(e){
+  drawing=true;startX=e.offsetX;startY=e.offsetY;ctx.globalAlpha=opacity;
+  if(tool==='eraser'){ctx.strokeStyle='#1a1a2e';ctx.lineWidth=brushSize*3;}
+  else{ctx.strokeStyle=color;ctx.fillStyle=color;ctx.lineWidth=brushSize;}
+  ctx.lineCap='round';ctx.lineJoin='round';
+  if(['pen','brush','eraser'].includes(tool)){ctx.beginPath();ctx.moveTo(startX,startY);}
+}
+function draw(e){
+  if(!drawing)return;
+  if(['pen','brush','eraser'].includes(tool)){ctx.lineTo(e.offsetX,e.offsetY);ctx.stroke();}
+  else if(tool==='line'){const snap=history[history.length-1];const img=new Image();img.onload=()=>{ctx.drawImage(img,0,0);ctx.beginPath();ctx.moveTo(startX,startY);ctx.lineTo(e.offsetX,e.offsetY);ctx.stroke();};img.src=snap;}
+}
+function endDraw(e){
+  if(!drawing)return;drawing=false;
+  if(tool==='rect')ctx.strokeRect(startX,startY,e.offsetX-startX,e.offsetY-startY);
+  else if(tool==='circle'){const rx=Math.abs(e.offsetX-startX)/2,ry=Math.abs(e.offsetY-startY)/2;ctx.beginPath();ctx.ellipse(startX+(e.offsetX-startX)/2,startY+(e.offsetY-startY)/2,rx,ry,0,0,Math.PI*2);ctx.stroke();}
+  ctx.globalAlpha=1;saveHistory();
+}
+function setTool(t){tool=t;canvas.style.cursor=t==='eraser'?'cell':t==='text'?'text':'crosshair';}
+function clearCanvas(){if(confirm('Limpar tudo?')){fillBg('#1a1a2e');saveHistory();}}
+function setBg(c){
+  if(!canvas){initCanvas();}
+  if(c==='grad1'){const g=ctx.createLinearGradient(0,0,canvas.width,canvas.height);g.addColorStop(0,'#141e30');g.addColorStop(1,'#243b55');ctx.fillStyle=g;ctx.fillRect(0,0,canvas.width,canvas.height);}
+  else fillBg(c);
+  saveHistory();
+}
+function addTextToCanvas(){
+  if(!canvas)return;
+  const txt=document.getElementById('txt-input').value||'Texto';
+  ctx.font=`${document.getElementById('txt-size').value}px ${document.getElementById('txt-font').value}`;
+  ctx.fillStyle=color;ctx.globalAlpha=opacity;
+  ctx.fillText(txt,canvas.width/2-ctx.measureText(txt).width/2,canvas.height/2);
+  ctx.globalAlpha=1;saveHistory();showNotify('Texto adicionado!');
+}
+function addShape(s){
+  if(!canvas)return;
+  const cx=canvas.width/2,cy=canvas.height/2;
+  ctx.globalAlpha=opacity;
+  const emojis={star:'⭐',heart:'❤️',arrow:'➡️',cloud:'☁️',check:'✅'};
+  if(s==='diamond'){ctx.strokeStyle=color;ctx.lineWidth=brushSize;ctx.beginPath();ctx.moveTo(cx,cy-60);ctx.lineTo(cx+60,cy);ctx.lineTo(cx,cy+60);ctx.lineTo(cx-60,cy);ctx.closePath();ctx.stroke();}
+  else{ctx.font='80px serif';ctx.fillText(emojis[s]||'✦',cx-40,cy+30);}
+  ctx.globalAlpha=1;saveHistory();showNotify('Elemento adicionado!');
+}
+function resizeCanvas(w,h,btn){
+  if(!canvas)return;const img=canvas.toDataURL();canvas.width=w;canvas.height=h;fillBg('#1a1a2e');
+  const i=new Image();i.onload=()=>{ctx.drawImage(i,0,0,w,h);saveHistory();};i.src=img;
+  document.querySelectorAll('.canvas-sidebar-left .size-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');
+}
+function downloadCanvas(){const a=document.createElement('a');a.href=canvas.toDataURL('image/png');a.download='well-design-creative.png';a.click();showNotify('Imagem baixada! ✦');}
+function updateColor(v){color=v;}
+function updateBrushSize(v){brushSize=parseInt(v);document.getElementById('brush-size-label').textContent=v+'px';}
+function updateOpacity(v){opacity=parseInt(v)/100;document.getElementById('opacity-label').textContent=v+'%';}
+function renderPalette(){
+  document.getElementById('palette-row').innerHTML=palette.map(c=>`<div class="color-swatch" style="background:${c}" onclick="document.getElementById('draw-color').value='${c}';updateColor('${c}')"></div>`).join('');
+}
+function switchCanvasTab(btn,tab){
+  document.querySelectorAll('.canvas-tab').forEach(t=>t.classList.remove('active'));btn.classList.add('active');
+  ['tools','elements','text'].forEach(t=>{const el=document.getElementById('canvas-tab-'+t);if(el)el.style.display=t===tab?'block':'none';});
+}
+let annual=false;
+function toggleBilling(){annual=!annual;document.getElementById('billing-toggle').classList.toggle('on',annual);document.getElementById('pro-price').textContent=annual?'R$27':'R$39';}
+function openUpgradeModal(){document.getElementById('upgrade-modal').classList.add('open');}
+function closeModal(){document.getElementById('upgrade-modal').classList.remove('open');}
+document.getElementById('upgrade-modal').addEventListener('click',function(e){if(e.target===this)closeModal();});
+function showNotify(msg){const n=document.getElementById('notify-toast');n.textContent=msg;n.classList.add('show');setTimeout(()=>n.classList.remove('show'),3200);}
+renderDashTemplates();renderDashPrompts();renderTemplates();renderTplFilters();renderPrompts();renderPromptFilters();
+</script>
+</body>
+</html>
